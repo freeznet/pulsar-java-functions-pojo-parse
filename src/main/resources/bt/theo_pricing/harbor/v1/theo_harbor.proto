@@ -1,0 +1,691 @@
+syntax = "proto3";
+
+import "bt/asset/proto/v1/asset_enums.proto";
+import "bt/messaging/grpc/proto/v1/message.proto";
+package bt.theo_pricing.harbor.v1;
+
+// Full Theo output for an option
+message AssetTheoOutput {
+  // Forward curve output component
+  ForwardCurveOutput forward_output = 1;
+  // silo component
+  SiloOutput silo_output = 2;
+  // strike component
+  StrikeOutput strike_output = 3;
+  // option component
+  OptionOutput option_output = 4;
+  // harbor VolChangeGroupTimestamp
+  int64 vol_change_group_timestamp = 5;
+  // harbor base asset
+  string base_asset = 6;
+  //option type
+  bt.asset.proto.v1.OptionType option_type = 7;
+}
+
+// Stints for an option
+message OptionStints {
+  // stint direct:
+  double stint_direct = 1;
+  // stint capital cost:
+  double stint_capital_cost = 2;
+  // delta stint:
+  double stint_delta = 3;
+  // stint speed:
+  double stint_speed = 4;
+  // stint pr in ap:
+  double stint_pr_in_ap = 5;
+  // stint k:
+  double stint_k = 6;
+  // delta k:
+  double delta_k = 7;
+  // vega k:
+  double vega_k = 8;
+  // gamma k:
+  double gamma_k = 9;
+  // radius prime k:
+  double radius_prime_k = 10;
+  // span prime k:
+  double span_prime_k = 11;
+  // height prime k:
+  double height_prime_k = 12;
+  // stint vol adjust:
+  double stint_vol_adjust = 13;
+}
+
+// Risk Greeks Output
+message RiskGreekOutput {
+  // ddelv total:
+  double ddelv_total = 1;
+  // ddelv black:
+  double ddelv_black = 2;
+  // ddelv ap:
+  double ddelv_ap = 3;
+  // ddelv prd pru:
+  double ddelv_prd_pru = 4;
+  // ap adjustment total:
+  double ap_adjustment_total = 5;
+  // ap adjustment black:
+  double ap_adjustment_black = 6;
+  // ap adjustment ap:
+  double ap_adjustment_ap = 7;
+  // ap adjustment prd pru:
+  double ap_adjustment_prd_pru = 8;
+  // div1 total:
+  double div1_total = 9;
+  // div1 black:
+  double div1_black = 10;
+  // div1 ap:
+  double div1_ap = 11;
+  // div1 prd pru:
+  double div1_prd_pru = 12;
+  // div all total:
+  double div_all_total = 13;
+  // div all black:
+  double div_all_black = 14;
+  // div all ap:
+  double div_all_ap = 15;
+  // div all prd pru:
+  double div_all_prd_pru = 16;
+  // opt delv total:
+  double opt_delv_total = 17;
+  // opt delv black:
+  double opt_delv_black = 18;
+  // opt delv ap:
+  double opt_delv_ap = 19;
+  // opt delv prd pru:
+  double opt_delv_prd_pru = 20;
+  // exercise difference:
+  double exercise_difference = 21;
+  // exercise difference:
+  double eod_delta_total = 22;
+  // eod delta black:
+  double eod_delta_black = 23;
+  // eod delta ap:
+  double eod_delta_ap = 24;
+  // eod delta prd pru:
+  double eod_delta_prd_pru = 25;
+  // eod gamma total:
+  double eod_gamma_total = 26;
+  // eod gamma bs:
+  double eod_gamma_bs = 27;
+  // eod gamma ap:
+  double eod_gamma_ap = 28;
+  // eod gamma prd pru:
+  double eod_gamma_prd_pru = 29;
+  // pre div variance:
+  double pre_div_variance = 30;
+  // pre variance black:
+  double pre_div_variance_black = 31;
+  // pre variance prd pru:
+  double pre_div_variance_prd_pru = 32;
+  // recenter delta total:
+  double recenter_delta_total = 33;
+  // recenter delta black:
+  double recenter_delta_black = 34;
+  // recenter delta ap:
+  double recenter_delta_ap = 35;
+  // recenter delta prd pru:
+  double recenter_delta_prd_pru = 36;
+  // prime recenter delta total:
+  double prime_recenter_delta_total = 37;
+  // prime recenter delta black:
+  double prime_recenter_delta_black = 38;
+  // prime recenter delta ap:
+  double prime_recenter_delta_ap = 39;
+  // prime recenter delta prd pru:
+  double prime_recenter_delta_prd_pru = 40;
+  // interest rate adjustment:
+  double interest_rate_adjustment = 41;
+  // ddelv prt:
+  double ddelv_prt = 42;
+  // div1 prt:
+  double div1_prt = 43;
+  // div all prt:
+  double div_all_prt = 44;
+  // eod delta prt:
+  double eod_delta_prt = 45;
+  // eod gamma prt:
+  double eod_gamma_prt = 46;
+  // recenter delta prt:
+  double recenter_delta_prt = 47;
+  // prime recenter delta prt:
+  double prime_recenter_delta_prt = 48;
+  // eod theta total:
+  double eod_theta_total = 49;
+  // eod theta black:
+  double eod_theta_black = 50;
+  // eod theta ap:
+  double eod_theta_ap = 51;
+  // eod theta prd pru:
+  double eod_theta_prd_pru = 52;
+  // eod theta prt:
+  double eod_theta_prt = 53;
+}
+
+// Option level outputs
+message OptionOutput {
+  // harbor asset id: used to link assets from Harbor to Assets within Tribe
+  int32 harbor_asset_id = 1;
+  // price: theo price of the option
+  double price = 2;
+  // delta of the option
+  double delta = 3;
+  // delta black:
+  double delta_black = 4;
+  // delta ap:
+  double delta_ap = 5;
+  // delta prd pru:
+  double delta_prd_pru = 6;
+  // internal delta:
+  double internal_delta = 7;
+  // internal american delta:
+  double internal_american_delta = 8;
+  // american premium:
+  double american_premium = 9;
+  // black price:
+  double black_price = 10;
+  // prd pru price:
+  double prd_pru_price = 11;
+  // stint addition:
+  double stint_addition = 12;
+  // dual delta:
+  double dual_delta = 13;
+  // charm:
+  double charm = 14;
+  // gamma:
+  double gamma = 15;
+  // gamma ap:
+  double gamma_ap = 16;
+  // gamma prd pru:
+  double gamma_prd_pru = 17;
+  // theta:
+  double theta = 18;
+  // theta ap:
+  double theta_ap = 19;
+  // theta prd pru:
+  double theta_prd_pru = 20;
+  // theta black:
+  double theta_black = 21;
+  // tree american price:
+  double tree_american_price = 22;
+  // tree eurpoean price:
+  double tree_european_price = 23;
+  // intrinsic value:
+  double intrinsic_value = 24;
+  // prd:
+  double prd = 25;
+  // prd prime:
+  double prd_prime = 26;
+  // pru:
+  double pru = 27;
+  // pru prime:
+  double pru_prime = 28;
+  // prd cutoff risk:
+  double prd_cutoff_risk = 29;
+  // prdu cutoff risk:
+  double pru_cutoff_risk = 30;
+  // risk outputs:
+  RiskGreekOutput risk_outputs = 31;
+  // should exercise:
+  bool should_exercise = 32;
+  // vega ap:
+  double vega_ap = 33;
+  // skew ap:
+  double skew_ap = 34;
+  // call kurt ap:
+  double callkurt_ap = 35;
+  // near call kurt ap:
+  double near_call_kurt_ap = 36;
+  // near put kurt ap:
+  double near_put_kurt_ap = 37;
+  // put kurt ap:
+  double put_kurt_ap = 38;
+  // wvega ap:
+  double wvega_ap = 39;
+  // arbitrage adjustment:
+  double arbitrage_adjustment = 40;
+  // auto arb adjust enabled:
+  double auto_arb_adjust_enabled = 41;
+  // extrinsic ap:
+  double extrinsic_ap = 42;
+  // ap extrinsic percentage risk:
+  double ap_extrinsic_percentage_risk = 43;
+  // extrinsic ap delta:
+  double extrinsic_ap_delta = 44;
+  // extrinsic ap gamma:
+  double extrinsic_ap_gamma = 45;
+  // extrinsic ap theta:
+  double extrinsic_ap_theta = 46;
+  // short term theta:
+  double short_term_theta = 47;
+  // vega total:
+  double vega_total = 48;
+  // wvega total:
+  double wvega_total = 49;
+  // call kurtosis prime total:
+  double call_kurtosis_prime_total = 50;
+  // put kurtosis prime total:
+  double put_kurtosis_prime_total = 51;
+  // near call kurtosis prime total:
+  double near_call_kurtosis_prime_total = 52;
+  // near put kurtosis prime total:
+  double near_put_kurtosis_prime_total = 53;
+  // skew prime total:
+  double skew_prime_total = 54;
+  // skew delta multiplier:
+  double stint_delta_multiplier = 55;
+  // stints:
+  OptionStints stints = 56;
+}
+
+// Strike Level Outputs
+message StrikeOutput {
+  // strike price
+  double strike_price = 1;
+  // call kurtosis:
+  double call_kurtosis = 2;
+  // call kurtosis prime:
+  double call_kurtosis_prime = 3;
+  // damp:
+  double damp = 4;
+  // gamma bs:
+  double gamma_bs = 5;
+  // hinge 1:
+  double hinge1 = 6;
+  // hinge 2:
+  double hinge2 = 7;
+  // put kurtosis:
+  double put_kurtosis = 8;
+  // put kurtosis prime:
+  double put_kurtosis_prime = 9;
+  // put call ratio:
+  double put_call_ratio = 10;
+  // skew:
+  double skew = 11;
+  // skew prime:
+  double skew_prime = 12;
+  // vega bs:
+  double vega_bs = 13;
+  // wvega bs:
+  double wvega_bs = 14;
+  // vol:
+  double vol = 15;
+  // vanna:
+  double vanna = 16;
+  // speed:
+  double speed = 17;
+  // zomma:
+  double zomma = 18;
+  // color:
+  double color = 19;
+  // veta:
+  double veta = 20;
+  // vera:
+  double vera = 21;
+  // vomma:
+  double vomma = 22;
+  // ultima:
+  double ultima = 23;
+  // dual gamma:
+  double dual_gamma = 24;
+  // near put kurtosis prime:
+  double near_put_kurtosis_prime = 25;
+  // near call kurtosis prime:
+  double near_call_kurtosis_prime = 26;
+  // wnear put kurtosis:
+  double wnear_put_kurtosis = 27;
+  // wnear call kurtosis:
+  double wnear_call_kurtosis = 28;
+  // is intrinsic for theta:
+  bool is_intrinsic_for_theta = 29;
+  // near call kurtosis:
+  double near_call_kurtosis = 30;
+  // near put kurtosis:
+  double near_put_kurtosis = 31;
+  // kurtosis addition:
+  double kurtosis_addition = 32;
+  // skew addition:
+  double skew_addition = 33;
+  // skew divisor:
+  double skew_divisor = 34;
+  // skew lt prime:
+  double skew_lt_prime = 35;
+  // wskew lt prime:
+  double wskew_lt_prime = 36;
+  // kurt opt prime:
+  double kurt_opt_prime = 37;
+  // wkurt opt prime:
+  double wkurt_opt_prime = 38;
+  // kurt rev prime:
+  double kurt_rev_prime = 39;
+  // wkurt rev prime:
+  double wkurt_rev_prime = 40;
+  // kurt tilt prime:
+  double kurt_tilt_prime = 41;
+  // wkurt tilt prime:
+  double wkurt_tilt_prime = 42;
+  // skew lt call damp:
+  double skew_lt_call_damp = 43;
+  // skew lt put damp:
+  double skew_lt_put_damp = 44;
+  // near kurtosis addition:
+  double near_kurtosis_addition = 45;
+  // kurt opt addition:
+  double kurt_opt_addition = 46;
+  // kurt rev addition:
+  double kurt_rev_addition = 47;
+  // kurt tilt addition:
+  double kurt_tilt_addition = 48;
+  // kurtosis addition total:
+  double kurtosis_addition_total = 49;
+  // skew st addition:
+  double skew_st_addition = 50;
+  // skew lt addition:
+  double skew_lt_addition = 51;
+  // prdt:
+  double prdt = 52;
+  // prut:
+  double prut = 53;
+  // prdt prime:
+  double prdt_prime = 54;
+  // prut prime:
+  double prut_prime = 55;
+  // prt addition:
+  double prt_addition = 56;
+  // prdt move std risk:
+  double prdt_move_std_risk = 57;
+  // prut move std risk:
+  double prut_move_std_risk = 58;
+  // prdt width risk:
+  double prdt_width_risk = 59;
+  // prut width risk:
+  double prut_width_risk = 60;
+  // delta prt:
+  double delta_prt = 61;
+  // gamma prt:
+  double gamma_prt = 62;
+  // theta prt:
+  double theta_prt = 63;
+  // pru width risk:
+  double pru_width_risk = 64;
+  // prd width risk:
+  double prd_width_risk = 65;
+  // reached vol floor ceiling:
+  bool reached_vol_floor_ceiling = 66;
+  // internal vega:
+  double internal_vega = 67;
+  // strike vol vega:
+  double strike_vol_vega = 68;
+  // strike vol skew prime:
+  double strike_vol_skew_prime = 69;
+  // strike vol skew lt prime:
+  double strike_vol_skew_lt_prime = 70;
+  // strike vol call kurtosis prime:
+  double strike_vol_call_kurtosis_prime = 71;
+  // strike vol put kurtosis prime:
+  double strike_vol_put_kurtosis_prime = 72;
+  // strike vol near call kurtosis prime:
+  double strike_vol_near_call_kurtosis_prime = 73;
+  // strike vol near put kurtosis prime:
+  double strike_vol_near_put_kurtosis_prime = 74;
+  // strike vol kurt opt prime:
+  double strike_vol_kurt_opt_prime = 75;
+  // strike vol kurt rev prime:
+  double strike_vol_kurt_rev_prime = 76;
+  // strike vol kurt tilt prime:
+  double strike_vol_kurt_tilt_prime = 77;
+  // vertical kurt addition:
+  double vertical_kurt_addition = 78;
+  // vertical kurt prime:
+  double vertical_kurt_prime = 79;
+  // wvertical kurt prime:
+  double wvertical_kurt_prime = 80;
+  // strike vol vertical kurt prime:
+  double strike_vol_vertical_kurt_prime = 81;
+  // fly skew addition:
+  double fly_skew_addition = 82;
+  // fly skew prime:
+  double fly_skew_prime = 83;
+  // wfly skew prime:
+  double wfly_skew_prime = 84;
+  // strike vol fly skew prime:
+  double strike_vol_fly_skew_prime = 85;
+  // fly kurt addition:
+  double fly_kurt_addition = 86;
+  // fly kurt prime:
+  double fly_kurt_prime = 87;
+  // wfly kurt prime:
+  double wfly_kurt_prime = 88;
+  // strike vol fly kurt prime:
+  double strike_vol_fly_kurt_prime = 89;
+  // vol adjust:
+  double vol_adjust = 90;
+  // vol without adjust:
+  double vol_without_adjust = 91;
+  // vega prd pru:
+  double vega_prd_pru = 92;
+  // vega prt:
+  double vega_prt = 93;
+  // wvega prd pru:
+  double wvega_prd_pru = 94;
+  // wvega prt:
+  double wvega_prt = 95;
+  // internal gamma:
+  double internal_gamma = 96;
+}
+
+// ForwardCurve output component
+message ForwardCurveOutput {
+  // bank time:
+  double bank_time = 1;
+  // interest rate:
+  double interest_rate = 2;
+  // forward:
+  double forward = 3;
+  // vol time:
+  double vol_time = 4;
+  // dividend yield:
+  double dividend_yield = 5;
+  // implied discrete dividend:
+  double implied_discrete_dividend = 6;
+}
+
+// Silo output component
+message SiloOutput {
+  // sys date:
+  DateTimeStruct sys_date = 1;
+  // trading date:
+  DateTimeStruct asset_trading_date = 2;
+  // expiration date:
+  DateTimeStruct month_expiration_date = 3;
+  // box rate:
+  double asset_box_rate = 4;
+  // start driver:
+  double asset_start_driver = 5;
+  // vol:
+  double vol = 6;
+  // skew:
+  double skew = 7;
+  // kurt:
+  double kurt = 8;
+  // pump:
+  double pump = 9;
+  // put call ratio:
+  double put_call_ratio = 10;
+  // damp:
+  double damp = 11;
+  // prd:
+  double prd = 12;
+  // pru:
+  double pru = 13;
+  // days out:
+  double days_out = 14;
+  // settle days:
+  double settle_days = 15;
+  // straddles change:
+  double straddles_change = 16;
+  // risk reversal change:
+  double risk_reversal_change = 17;
+  // wings change:
+  double wings_change = 18;
+  // static values:
+  bool static_values = 19;
+  // override vol:
+  double override_vol = 20;
+  // override skew:
+  double override_skew = 21;
+  // override kurt:
+  double override_kurt = 22;
+  // x dividend:
+  double x_dividend = 23;
+  // hinge 1:
+  double hinge1 = 24;
+  // hinge 2:
+  double hinge2 = 25;
+  // hinge 3:
+  double hinge3 = 26;
+  // trading date id:
+  string trading_date_id = 27;
+  // decay days:
+  double decay_days = 28;
+  // american premium vol multiplier:
+  double american_premium_vol_multiplier = 29;
+  // put kurt:
+  double put_kurt = 30;
+  // put wings change:
+  double put_wings_change = 31;
+  // override put kurt:
+  double override_put_kurt = 32;
+  // strike strangle put:
+  double strike_strangle_put = 33;
+  // strike rr put:
+  double strike_rr_put = 34;
+  // strike rr call:
+  double strike_rr_call = 35;
+  // strike strangle call:
+  double strike_strangle_call = 36;
+  // prd cutoff:
+  double prd_cutoff = 37;
+  // pru cutoff:
+  double pru_cutoff = 38;
+  // roll change:
+  double roll_change = 39;
+  // portion on discrete dividend:
+  double portion_on_discrete_dividend = 40;
+  // vol days:
+  double vol_days = 41;
+  // prd change:
+  double prd_change = 42;
+  // pru change:
+  double pru_change = 43;
+  // near call kurt:
+  double near_call_kurt = 44;
+  // near call wings change:
+  double near_call_wings_change = 45;
+  // near put kurt:
+  double near_put_kurt = 46;
+  // near put wings change:
+  double near_put_wings_change = 47;
+  // implied prd cutoff:
+  double implied_prd_cutoff = 48;
+  // implied pru cutoff:
+  double implied_pru_cutoff = 49;
+  // prd move std:
+  double prd_move_std = 50;
+  // pru move std:
+  double pru_move_std = 51;
+  // pumped skew:
+  double pumped_skew = 52;
+  // profile adjusted pumped skew:
+  double profile_adjusted_pumped_skew = 53;
+  // pumped call kurtosis:
+  double pumped_call_kurtosis = 54;
+  // pumped put kurtosis:
+  double pumped_put_kurtosis = 55;
+  // open skew prime:
+  double open_skew_prime = 56;
+  // open call kurt prime:
+  double open_call_kurt_prime = 57;
+  // open put kurt prime:
+  double open_put_kurt_prime = 58;
+  // risk reversal total put change:
+  double risk_reversal_total_put_change = 59;
+  // risk reversal total call change:
+  double risk_reversal_total_call_change = 60;
+  // call wing total change:
+  double call_wing_total_change = 61;
+  // put wing total change:
+  double put_wing_total_change = 62;
+  // skew lt prime:
+  double skew_lt_prime = 63;
+  // kurt opt prime:
+  double kurt_opt_prime = 64;
+  // kurt rev prime:
+  double kurt_rev_prime = 65;
+  // kurt tilt prime:
+  double kurt_tilt_prime = 66;
+  // prdt prime:
+  double prdt_prime = 67;
+  // prut prime:
+  double prut_prime = 68;
+  // vega:
+  double vega = 69;
+  // pru prime:
+  double pru_prime = 70;
+  // prd prime:
+  double prd_prime = 71;
+  // underlying beta:
+  double underlying_beta = 72;
+  // skew prime:
+  double skew_prime = 73;
+  // call kurt prime:
+  double call_kurt_prime = 74;
+  // put kurt prime:
+  double put_kurt_prime = 75;
+  // skew lt:
+  double skew_lt = 76;
+  // kurt tilt:
+  double kurt_tilt = 77;
+  // kurt opt:
+  double kurt_opt = 78;
+  // kurt rev:
+  double kurt_rev = 79;
+  // prut:
+  double prut = 80;
+  // prdt:
+  double prdt = 81;
+  // near call kurtosis prime:
+  double near_call_kurtosis_prime = 82;
+  // near put kurtosis prime:
+  double near_put_kurtosis_prime = 83;
+  // vertical kurt:
+  double vertical_kurt = 84;
+  // vertical kurt prime:
+  double vertical_kurt_prime = 85;
+  // fly skew:
+  double fly_skew = 86;
+  // fly skew prime:
+  double fly_skew_prime = 87;
+  // fly kurt:
+  double fly_kurt = 88;
+  // fly kurt prime:
+  double fly_kurt_prime = 89;
+  // va pr:
+  double va_pr = 90;
+}
+
+// DateTime
+message DateTimeStruct {
+  // day
+  int32 day = 1;
+  // month
+  int32 month = 2;
+  // year
+  int32 year = 3;
+  // hours
+  int32 hours = 4;
+  // minutes
+  int32 minutes = 5;
+  // seconds
+  int32 seconds = 6;
+}

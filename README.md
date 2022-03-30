@@ -1,11 +1,13 @@
 ## Pulsar Function Sample with POJO parser
 
 ```bash
-bin/pulsar-admin functions create --jar /pulsar/pulsar-java-functions-pojo-parse-1.0-SNAPSHOT.jar --classname org.examples.PojoParserFunction --inputs persistent://public/default/input --parallelism 3 --name pojo-parser --user-config '{"beijing":"persistent://public/default/beijing","wuhan":"persistent://public/default/wuhan","guangzhou":"persistent://public/default/guangzhou"}' --log-topic persistent://public/default/log
+bin/pulsar-admin functions create --jar /pulsar/pulsar-java-functions-pojo-parse-1.0-SNAPSHOT.jar --classname org.examples.PojoParserFunction --inputs persistent://public/default/input --parallelism 100 --name pojo-parser --user-config '{"beijing":"persistent://public/default/beijing","wuhan":"persistent://public/default/wuhan","guangzhou":"persistent://public/default/guangzhou"}' --log-topic persistent://public/default/log
 ```
 
 ```bash
 bin/pulsar-admin functions status --name pojo-parser
+
+bin/pulsar-admin functions delete --name pojo-parser
 ```
 
 ```json

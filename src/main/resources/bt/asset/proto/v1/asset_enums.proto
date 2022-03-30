@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package bt.asset.proto.v1;
+
+// NOTE: These enum vals do not directly match the enum values of the api enum
+enum OptionType
+{
+  // Not set
+  OPTION_TYPE_UNSPECIFIED = 0;
+  // Put
+  OPTION_TYPE_PUT = 1;
+  // Call
+  OPTION_TYPE_CALL = 2;
+};
+
+// Is outright bought or sold
+enum Side
+{
+  // Not set
+  SIDE_UNSPECIFIED = 0;
+  // Buy
+  SIDE_BUY = 1;
+  // Sell
+  SIDE_SELL = 2;
+};
+
+// How option is exercised
+enum ExerciseStyle
+{
+  // Not set
+  EXERCISE_STYLE_UNSPECIFIED = 0;
+  // American
+  EXERCISE_STYLE_AMERICAN = 1;
+  // European
+  EXERCISE_STYLE_EUROPEAN = 2;
+};

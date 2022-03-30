@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package bt.messaging.v1;
+
+// metadata to identify a message
+message MessageMetadata
+{
+    // partition
+    int32 partition = 1;
+    // ledger id
+    int64 ledger_id = 2;
+    // entry id
+    int64 entry_id = 3;
+    // batch index
+    int32 batch_index = 4;
+}

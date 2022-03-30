@@ -6,4 +6,6 @@ import lombok.Data;
 public class StatementBean {
     private String city;
     private String value;
+    private String longValue;
+    private String foo;
 }
