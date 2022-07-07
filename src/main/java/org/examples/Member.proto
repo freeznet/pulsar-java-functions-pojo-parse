@@ -1,0 +1,16 @@
+syntax = "proto3";
+package proto;
+
+option java_package = "org.examples";
+option java_outer_classname = "MemberClazz";
+
+import "org/examples/Static.proto";
+
+message Member {
+  int32 id = 1;
+  string name = 2;
+  string address = 3;
+  Country country = 4;
+  City city = 5;
+  Gender gender = 6;
+}

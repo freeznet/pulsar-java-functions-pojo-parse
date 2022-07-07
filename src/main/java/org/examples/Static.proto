@@ -1,0 +1,19 @@
+syntax = "proto3";
+package proto;
+
+option java_package = "org.examples";
+
+message Country {
+  string code = 1;
+  string name = 2;
+}
+
+message City {
+  string code = 1;
+  string name = 2;
+}
+
+enum Gender {
+  MALE = 0;
+  FEMALE = 1;
+}

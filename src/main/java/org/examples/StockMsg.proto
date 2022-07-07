@@ -26,4 +26,12 @@ message Stock {
     int32 entryId = 1;
     string symbol = 2;
     double sharePrice = 3;
+    InnerStock innerStock = 4;
+    map<string, string> maps = 5;
+}
+
+message InnerStock {
+    int32 entryId = 1;
+    string symbol = 2;
+    double sharePrice = 3;
 }

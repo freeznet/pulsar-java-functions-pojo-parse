@@ -1,5 +1,6 @@
 package org.examples;
 
+import static org.examples.SNCloudProducer.getRandom;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
+import org.apache.pulsar.client.api.Schema;
 import org.apache.pulsar.client.impl.auth.oauth2.AuthenticationFactoryOAuth2;
 import org.apache.pulsar.client.impl.schema.JSONSchema;
 
@@ -15,10 +17,10 @@ public class TestAVROProducer {
     public static void main(String[] args) throws InterruptedException, IOException {
         String issuerUrl = "https://auth.test.cloud.gcp.streamnative.dev/";
         String credentialsUrl = "file:///Users/rui/Downloads/dev-rfu-admin.json";
-        String audience = "urn:sn:pulsar:dev-rfu:dev";
+        String audience = "urn:sn:pulsar:dev-rfu:cluster";
 
         PulsarClient client = PulsarClient.builder()
-                .serviceUrl("pulsar+ssl://dev.dev-rfu.test.sn2.dev:6651")
+                .serviceUrl("pulsar+ssl://cluster-a3d4f742-b822-44d1-866e-66dd86e6b9f9.gcp-shared-gcp-use1-gazelle.streamnative.test.g.sn2.dev:6651")
                 .authentication(
                         AuthenticationFactoryOAuth2
                                 .clientCredentials(new URL(issuerUrl), new URL(credentialsUrl), audience))
@@ -28,18 +30,21 @@ public class TestAVROProducer {
          * Producer<String> producer = client.newProducer(JSONSchema.of(String.class))
          * .topic("persistent://public/default/cilium-telemetry-4") .create();
          */
-        //Schema.JSON
-        Producer<AccuknoxJsonObject> producer = client.newProducer(JSONSchema.of(AccuknoxJsonObject.class)).topic("cloud-storage-sink-json-topic").create();
-        //Producer<byte[]> producer = client.newProducer().topic("cilium-test1").create();
-        FileReader fr = null;
-        BufferedReader br = null;
-        AccuknoxJsonObject jsonObject = null;
+        Producer<AerospikePlayer> producer = client.newProducer(Schema.AVRO(AerospikePlayer.class)).topic("input_topic").create();
+        String[] keys = {"mtv", "pvg", "nyc", "ignore"};
         for (int i=0;i<=90;i++) {
-            String line = "test";
-            System.out.println(line);
-            //for(int i = 0 ; i< 1000000; i++)
-            jsonObject = new AccuknoxJsonObject(line);
-            producer.send(jsonObject);
+            AerospikePlayer player = new AerospikePlayer();
+            player.setId(i);
+            player.setName("name_"+i);
+            player.setNamespace("namespace_"+i);
+            player.setTtl(i*10);
+            StatementBean statementBean = new StatementBean();
+            statementBean.setCity("city_"+i);
+            statementBean.setFoo("country_"+i);
+            statementBean.setValue("v" + i);
+            statementBean.setLongValue("long" + i);
+            player.setStatementBean(statementBean);
+            producer.newMessage(Schema.AVRO(AerospikePlayer.class)).value(player).key(getRandom(keys)).property("ROUTING", "TRUE").send();
         }
         producer.close();
         client.close();

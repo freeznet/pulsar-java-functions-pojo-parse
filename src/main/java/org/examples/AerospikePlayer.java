@@ -8,4 +8,5 @@ public class AerospikePlayer {
     private String name;
     private String namespace;
     private int ttl;
+    private StatementBean statementBean;
 }
